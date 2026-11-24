@@ -1,0 +1,65 @@
+_format_version: "3.0"
+
+services:
+  - name: servicio-estudiantes
+    url: http://srv-estudiantes:8000/srv-estudiantes/estudiantes
+    routes:
+      - name: ruta-estudiantes
+        paths:
+          - /api/estudiantes
+        strip_path: true
+        methods:
+          - GET
+
+  - name: servicio-matriculas
+    url: http://srv-matriculas:8000/srv-matriculas/matriculas
+    routes:
+      - name: ruta-matriculas
+        paths:
+          - /api/matriculas
+        strip_path: true
+        methods:
+          - GET
+
+  - name: servicio-pagos
+    url: http://srv-pagos:8000/srv-pagos/pagos
+    routes:
+      - name: ruta-pagos
+        paths:
+          - /api/pagos
+        strip_path: true
+        methods:
+          - GET
+
+  - name: servicio-certificados
+    url: http://srv-certificados:8000/srv-certificados/certificados
+    routes:
+      - name: ruta-certificados
+        paths:
+          - /api/certificados
+        strip_path: true
+        methods:
+          - GET
+
+plugins:
+  - name: key-auth
+    config:
+      key_names:
+        - apikey
+  - name: rate-limiting
+    service: servicio-certificados
+    consumer: cliente-app
+    config:
+      minute: 2
+      policy: local
+  - name: rate-limiting
+    consumer: cliente-app
+    config:
+      minute: 5
+      limit_by: consumer
+      policy: local
+
+consumers:
+  - username: cliente-app
+    keyauth_credentials:
+      - key: edu-connect-secret-key

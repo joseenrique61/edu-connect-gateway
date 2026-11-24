@@ -1,0 +1,73 @@
+name: "edu-connect-group-1"
+
+services:
+  kong-dbless:
+    image: kong/kong:3.9.5
+    container_name: kong
+    read_only: true
+    user: root
+    restart: unless-stopped
+    networks:
+      - kong-net
+    volumes:
+      - ./kong_config:/kong/declarative/
+      - kong-tmp:/tmp
+      - kong-prefix:/var/run/kong
+    environment:
+      KONG_PREFIX: /var/run/kong
+      KONG_DATABASE: off
+      KONG_DECLARATIVE_CONFIG: /kong/declarative/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_ADMIN_GUI_URL: http://localhost:8002
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "8001:8001"
+      - "8444:8444"
+      - "8002:8002"
+      - "8445:8445"
+      - "8003:8003"
+      - "8004:8004"
+
+  estudiantes:
+    build:
+      context: ./servicios/estudiantes
+      dockerfile: ../Dockerfile
+    container_name: srv-estudiantes
+    networks:
+      - kong-net
+
+  matriculas:
+    build:
+      context: ./servicios/matriculas
+      dockerfile: ../Dockerfile
+    container_name: srv-matriculas
+    networks:
+      - kong-net
+
+  pagos:
+    build:
+      context: ./servicios/pagos
+      dockerfile: ../Dockerfile
+    container_name: srv-pagos
+    networks:
+      - kong-net
+
+  certificados:
+    build:
+      context: ./servicios/certificados
+      dockerfile: ../Dockerfile
+    container_name: srv-certificados
+    networks:
+      - kong-net
+
+networks:
+  kong-net:
+
+volumes:
+  kong-tmp:
+  kong-prefix:

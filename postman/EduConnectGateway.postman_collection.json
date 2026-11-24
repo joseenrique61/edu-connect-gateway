@@ -1,0 +1,329 @@
+{
+  "info": {
+    "_postman_id": "5b8bf1a0-14cc-4a8c-ab12-c11ae64d9e12",
+    "name": "EduConnectGateway",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29489453"
+  },
+  "item": [
+    {
+      "name": "Estudiantes",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Responde el servicio de estudiantes', function () {",
+              "    pm.response.to.have.header('X-Service-Name', 'servicio-estudiantes');",
+              "});",
+              "pm.test('Estructura JSON válida de Estudiante', function () {",
+              "    var data = pm.response.json();",
+              "    pm.expect(data).to.have.property('id', 101);",
+              "    pm.expect(data).to.have.property('nombre', 'Ana Perez');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "edu-connect-secret-key"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/estudiantes",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "estudiantes"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Matriculas",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Responde el servicio de matriculas', function () {",
+              "    pm.response.to.have.header('X-Service-Name', 'servicio-matriculas');",
+              "});",
+              "pm.test('Estructura JSON válida de Matrícula', function () {",
+              "    var data = pm.response.json();",
+              "    pm.expect(data).to.have.property('id', 501);",
+              "    pm.expect(data).to.have.property('estado', 'ACTIVA');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "edu-connect-secret-key"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/matriculas",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "matriculas"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Pagos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Responde el servicio de pagos', function () {",
+              "    pm.response.to.have.header('X-Service-Name', 'servicio-pagos');",
+              "});",
+              "pm.test('Estructura JSON válida de Pagos', function () {",
+              "    var data = pm.response.json();",
+              "    pm.expect(data).to.have.property('id', 701);",
+              "    pm.expect(data).to.have.property('valor', 150.00);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "edu-connect-secret-key"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/pagos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "pagos"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Certificados",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 200 OK o 429 Rate Limit', function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 429]);",
+              "});",
+              "if (pm.response.code === 200) {",
+              "    pm.test('Responde el servicio de certificados', function () {",
+              "        pm.response.to.have.header('X-Service-Name', 'servicio-certificados');",
+              "    });",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "edu-connect-secret-key"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/certificados",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "certificados"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Estudiantes - Sin API Key",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 401 Unauthorized', function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "pm.test('Mensaje de error por falta de API Key', function () {",
+              "    var data = pm.response.json();",
+              "    pm.expect(data.message).to.eql('No API key found in request');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/estudiantes",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "estudiantes"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Estudiantes - API Key Incorrecta",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 401 Unauthorized', function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "pm.test('Mensaje de error por credencial inválida', function () {",
+              "    var data = pm.response.json();",
+              "    pm.expect(data.message).to.eql('Unauthorized');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "api-key-incorrecta"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/estudiantes",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "estudiantes"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Ruta No Existente",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 404 Not Found', function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "pm.test('Mensaje de ruta no encontrada de Kong', function () {",
+              "    var data = pm.response.json();",
+              "    pm.expect(data.message).to.eql('no Route matched with those values');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "edu-connect-secret-key"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/clases",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "clases"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Certificados - Rate Limit Excedido",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Agotamos las 2 peticiones permitidas en segundo plano",
+              "const requestConfig = {",
+              "    url: pm.variables.get('baseUrl') + '/api/certificados',",
+              "    method: 'GET',",
+              "    header: [{ key: 'apikey', value: 'edu-connect-secret-key' }]",
+              "};",
+              "",
+              "pm.sendRequest(requestConfig, function () {",
+              "    pm.sendRequest(requestConfig, function () {",
+              "        console.log('Cuota de certificados agotada previamente (2 peticiones realizadas).');",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 429 Too Many Requests', function () {",
+              "    pm.response.to.have.status(429);",
+              "});",
+              "",
+              "pm.test('Mensaje de error oficial de Kong por Rate Limit', function () {",
+              "    var data = pm.response.json();",
+              "    pm.expect(data.message).to.eql('API rate limit exceeded');",
+              "});",
+              "",
+              "pm.test('Kong incluye cabecera Retry-After', function () {",
+              "    pm.response.to.have.header('Retry-After');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "edu-connect-secret-key"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/certificados",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "certificados"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    }
+  ]
+}
